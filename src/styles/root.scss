@@ -1,0 +1,26 @@
+.appbar {
+    height: 60px;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+
+    .toolbar-left {
+        display: flex;
+        align-items: center;
+        width: 115px;
+        .home-icon {
+            margin-right: 5px;
+        }
+    }
+
+    .toolbar-right {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .more-vert-icon {
+            margin-left: 5px;
+        }
+    }
+}
