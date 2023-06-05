@@ -1,10 +1,110 @@
 .dish-select-wrapper {
-    width: 370px;
-    position: absolute;
-    top: 60px;
-    margin: 10px;
+  width: 370px;
+  position: absolute;
+  height: calc(100vh - 20px);
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  .tab-panel {
+    overflow-y: scroll;
+    height: 600px;
+    width: 100%;
+  }
+
+  .dish-card-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow-y: scroll;
+    grid-row-gap: 20px;
+    grid-column-gap: 20px;
+    padding: 5px;
+  }
+
+  .tabs {
+    width: 100%;
+
+    .tab {
+      width: 50%;
+    }
+  }
 }
 
 .search-box-wrapper {
+  width: 100%;
+  padding-top: 60px;
+}
+
+.dish-card {
+  img {
     width: 100%;
+  }
+
+  .dish-title {
+    line-height: 26px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+  }
+  //   height: 160px;
+}
+
+.modal-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  width: 300px;
+
+  img {
+    width: 100%;
+  }
+
+  .dish-detail {
+    padding: 10px;
+    .line-1 {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 54px;
+
+      .dish-name {
+        font-size: 26px;
+      }
+    }
+
+    .line-2,
+    .line-4 {
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    .line-3,
+    .line-5 {
+      font-size: 14px;
+      line-height: 20px;
+    }
+  }
+
+  .icon-wrap {
+    display: flex;
+    justify-content: flex-end;
+    height: 40px;
+    align-items: center;
+
+    .edit-icon {
+      color: #1976d2;
+      
+    }
+
+    .favorite-icon {
+      color: #f44336;
+    }
+
+    .play-arrow-icon {
+      color: #009688;
+    }
+  }
 }

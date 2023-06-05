@@ -1,8 +1,31 @@
-import axios from "axios";
-const API_BASE_URL = "http://localhost:8888";
+import axios from 'axios'
 
-export const getDishes = () => {
-    return axios.get(`${API_BASE_URL}/dishes/?page_size=10&page_index=0`)
-}
+const api = axios.create({
+  baseURL: 'http://127.0.0.1:8888',
+  timeout: 5000,
+})
 
+api.interceptors.request.use(
+  (config) => {
+    return config
+  },
+  (error) => {
+    console.log(error)
+    return Promise.reject(error)
+  }
+)
 
+api.interceptors.response.use(
+  (response) => {
+    if (response.status === 200) {
+      return Promise.resolve(response)
+    } else {
+      return Promise.reject(response)
+    }
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
+
+export { api }
