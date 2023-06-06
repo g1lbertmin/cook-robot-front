@@ -3,4 +3,25 @@
   position: absolute;
   height: calc(100vh - 20px);
   margin: 10px;
+
+  .save-delete {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+
+    .dish-name {
+      font-size: 12px;
+      line-height: 24px;
+    }
+
+    .dish-name-value {
+      font-size: 16px;
+      line-height: 26px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+  }
 }

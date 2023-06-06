@@ -1,0 +1,36 @@
+.step-bar-wrapper {
+
+  margin-top: 60px;
+  overflow-x: scroll;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  background-color: #eeeeee;
+  padding-bottom: 30px;
+
+  > * {
+    flex: 0 0 auto;
+  }
+
+  .step-wrapper {
+    width: 100px;
+    transform: translateY(30%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .step-content {
+      margin-top: 10px;
+      margin-bottom: 5px;
+    }
+  }
+
+  .divider {
+    width: 40px;
+    height: 1px;
+    background-color: gray;
+  }
+}
+
+.add-circle {
+  color: purple;
+}
