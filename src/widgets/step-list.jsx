@@ -2,8 +2,12 @@ import '@/styles/step-list.scss'
 import { secondsToMMSS } from '@/utils/time-format'
 import { IconButton } from '@mui/material'
 import { AddCircle,WaterDrop } from '@mui/icons-material'
+import IngredientDialog from './ingredient-dialog'
+import { useState } from 'react'
 
 export default function StepList({ stepName, steps }) {
+  const [showIngredientDialog, setShowIngredientDialog] = useState(false);
+
   const stepDisplayName = (stepName) => {
     switch (stepName) {
       case 'ingredient':
@@ -43,6 +47,19 @@ export default function StepList({ stepName, steps }) {
         return 'ERROR'
     }
   }
+
+  const handleModalToggle = () => {
+    console.log(stepName)
+    switch (stepName) {
+      case 'ingredient':
+        setShowIngredientDialog(!showIngredientDialog);
+        break;
+    
+      default:
+        break;
+    }
+  }
+
   return (
     <div className="step-list-wrapper">
       <div className="display-name">{stepDisplayName(stepName)}</div>
@@ -52,7 +69,7 @@ export default function StepList({ stepName, steps }) {
         ))}
       </div>
       <div className="step-control">
-        <IconButton>
+        <IconButton onClick={handleModalToggle}>
           <AddCircle />
         </IconButton>
         {
@@ -61,6 +78,7 @@ export default function StepList({ stepName, steps }) {
         </IconButton>
         }
       </div>
+      <IngredientDialog isOpen={showIngredientDialog} onClose={handleModalToggle}/>
     </div>
   )
 }

@@ -17,7 +17,7 @@ import {
   getStarredDishes,
   getStarredDishesCount,
   getDish,
-} from '@/dish'
+} from '@/api/dish'
 
 import { Edit, Favorite, PlayArrow } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'

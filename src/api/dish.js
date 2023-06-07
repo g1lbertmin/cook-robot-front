@@ -1,4 +1,4 @@
-import { api } from '@/api.js'
+import { api } from '@/api'
 
 export function getDishes(page_index, page_size, initials) {
   return api({
