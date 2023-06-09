@@ -1,15 +1,10 @@
+@import './mixins.scss';
+
 .dish-name-dialog-box {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
+  @extend .modal-box;
   width: 200px;
   height: 200px;
-  background-color: white;
-
-
-  padding: 20px;
-
+  
   .label {
     line-height: 30px;
     margin-bottom: 10px;

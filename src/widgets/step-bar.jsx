@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import '@/styles/step-bar.scss'
 import { AddCircle } from '@mui/icons-material'
 import { sortBy } from '@/utils/array'
+import { cloneDeep } from 'lodash'
 
 export default function StepBar({editingDish}) {
 
@@ -9,19 +10,20 @@ export default function StepBar({editingDish}) {
   useEffect(() => {
     console.log(editingDish)
 
-    const steps = editingDish.steps
+    const cloneSteps = cloneDeep(editingDish.steps)
 
     const line = []
-    for (const key in steps) {
+    for (const key in cloneSteps) {
       if (key !== 'finish') {
-        line.push(...steps[key])
+        line.push(...cloneSteps[key])
       }
     }
     line.sort(sortBy('time', 1))
-    const finish = steps['finish'][0]
+    const finish = cloneSteps['finish'][0]
+    console.log('finish: ',finish, line)
     finish.time = line[line.length - 1].time + 10
     line.push(finish)
-
+    console.log('line', line)
     setStepLine(line)
   }, [editingDish])
 

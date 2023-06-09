@@ -27,6 +27,20 @@ const useStore = create((set) => ({
       snackbarInfo: info,
     })
   },
+
+  showIngredientDialog: false,
+  setShowIngredientDialog: (show) => {
+    set({
+      showIngredientDialog: show
+    })
+  },
+
+  showIngredientWaterDialog: false,
+  setShowIngredientWaterDialog: (show) => {
+    set({
+      showIngredientWaterDialog: show
+    })
+  }
 }))
 
 export default useStore

@@ -1,0 +1,26 @@
+.min-sec {
+  display: flex;
+  width: 100%;
+
+  .label { 
+    width: 100px;
+  }
+
+  .form-2 {
+    width:85px;
+    margin-right: 30px;
+
+    .min-label {
+      background-color: white;
+    }
+  }
+
+  .form-3 {
+    width: 85px;
+
+    .sec-label {
+      background-color: white;
+
+    }
+  }
+}

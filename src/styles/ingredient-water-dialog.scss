@@ -1,0 +1,43 @@
+@import './mixins.scss';
+
+.ingredient-water-dialog-box {
+  @extend .modal-box;
+  width: 300px;
+
+  .title {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .form-1 {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    .label {
+      width: 50px;
+      margin-right: 20px;
+    }
+
+    .select {
+      width: 200px;
+    }
+
+    .form-control-label {
+      margin-right: 5px;
+    }
+
+    margin-bottom: 20px;
+  }
+
+  .button-group {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+
+    .cancel-button {
+      color: black;
+    }
+  }
+}

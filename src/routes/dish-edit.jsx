@@ -4,13 +4,18 @@ import useStore from '@/use-store'
 import { Button } from '@mui/material'
 import StepList from '@/widgets/step-list'
 import { sortBy } from '@/utils/array'
-import DishNameDialog from '../widgets/dish-name-dialog'
+import DishNameDialog from '@/widgets/dish-name-dialog'
+import IngredientDialog from '@/widgets/ingredient-dialog'
+import IngredientWaterDialog from '@/widgets/ingredient-water-dialog'
 import { useState } from 'react'
 
 export default function DishEdit() {
   const [editingDish] = useStore((state) => [state.editingDish])
 
   const [dishNameDialogOpen, setDishNameDialogOpen] = useState(false)
+  const [showIngredientDialog, setShowIngredientDialog] = useState(false)
+  const [showIngredientWaterDialog, setShowIngredientWaterDialog] =
+    useState(false)
 
   const handleSaveSteps = () => {
     const stepsList = []
@@ -58,6 +63,8 @@ export default function DishEdit() {
         isOpen={dishNameDialogOpen}
         handleClose={() => setDishNameDialogOpen(false)}
       />
+      <IngredientDialog />
+      <IngredientWaterDialog />
     </div>
   )
 }

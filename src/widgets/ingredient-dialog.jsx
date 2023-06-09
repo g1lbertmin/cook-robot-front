@@ -13,13 +13,20 @@ import {
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { getIngredients } from '@/api/ingredient'
-import { getShapes } from '../api/ingredient'
+import { getShapes } from '@/api/ingredient'
+import useStore from '@/use-store'
+import '@/styles/ingredient-dialog.scss'
+import TimeSelect from './time-select'
 
 const WEIGHT_MIN = 10,
   WEIGHT_MAX = 1000,
   WEIGHT_STEP = 10
 
-export default function IngredientDialog({ isOpen, onClose }) {
+export default function IngredientDialog() {
+  const [isOpen, setOpen] = useStore((state) => [
+    state.showIngredientDialog,
+    state.setShowIngredientDialog,
+  ])
   const [name, setName] = useState('')
   const [shape, setShape] = useState('')
   const [weight, setWeight] = useState(WEIGHT_MIN)
@@ -29,8 +36,6 @@ export default function IngredientDialog({ isOpen, onClose }) {
   const [slot, setSlot] = useState(1)
   const [min, setMin] = useState(0)
   const [sec, setSec] = useState(0)
-  const [minOptions, setMinOptions] = useState([])
-  const [secOptions, setSecOptions] = useState([])
 
   const handleNameChange = (event) => {
     setName(event.target.value)
@@ -64,44 +69,16 @@ export default function IngredientDialog({ isOpen, onClose }) {
       weightOptions.push(i)
     }
     setWeightOptions(weightOptions)
-
-    const minOptions = []
-    const secOptions = []
-    for (let i = 0; i < 61; i++) {
-      minOptions.push({
-        label: i < 10 ? '0' + i : String(i),
-        value: i,
-      })
-      if (i !== 60) {
-        secOptions.push({
-          label: i < 10 ? '0' + i : String(i),
-          value: i,
-        })
-      }
-    }
-    setMinOptions(minOptions)
-    setSecOptions(secOptions)
   }, [])
 
-  const handleMinChange = (event) => {
-    console.log(event.target.value)
-    setMin(event.target.value)
-  }
-
-  const handleSecChange = (event) => {
-    setSec(event.target.value)
-  }
-
   const handleCancel = () => {
-    onClose();
+    setOpen(false)
   }
 
-  const handleSubmit = () => {
-    
-  }
+  const handleSubmit = () => {}
 
   return (
-    <Modal open={isOpen} onClose={onClose}>
+    <Modal open={isOpen} onClose={() => setOpen(false)}>
       <Box className="ingredient-modal-box">
         <div className="title">添加食材</div>
         <FormControl className="form-1">
@@ -166,29 +143,7 @@ export default function IngredientDialog({ isOpen, onClose }) {
             ))}
           </RadioGroup>
         </FormControl>
-        <div className="min-sec">
-          <div className="label">时刻</div>
-          <FormControl className="form-2">
-            <InputLabel>分</InputLabel>
-            <Select value={min} onChange={handleMinChange} size="small">
-              {minOptions.map((item) => (
-                <MenuItem value={item.value} key={item.label}>
-                  {item.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl className="form-3">
-            <InputLabel>秒</InputLabel>
-            <Select value={sec} onChange={handleSecChange} size="small">
-              {secOptions.map((item) => (
-                <MenuItem value={item.value} key={item.label}>
-                  {item.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </div>
+        <TimeSelect min={min} setMin={setMin} sec={sec} setSec={setSec} />
         <div>
           <Button onClick={handleCancel}>取消</Button>
           <Button onClick={handleSubmit}>提交</Button>

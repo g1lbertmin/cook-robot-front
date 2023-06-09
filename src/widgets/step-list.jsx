@@ -1,13 +1,16 @@
 import '@/styles/step-list.scss'
 import { secondsToMMSS } from '@/utils/time-format'
 import { IconButton } from '@mui/material'
-import { AddCircle,WaterDrop } from '@mui/icons-material'
-import IngredientDialog from './ingredient-dialog'
-import { useState } from 'react'
+import { AddCircle, WaterDrop } from '@mui/icons-material'
+import useStore from '../use-store'
 
 export default function StepList({ stepName, steps }) {
-  const [showIngredientDialog, setShowIngredientDialog] = useState(false);
-
+  const [setShowIngredientDialog, setShowIngredientWaterDialog] = useStore(
+    (state) => [
+      state.setShowIngredientDialog,
+      state.setShowIngredientWaterDialog,
+    ]
+  )
   const stepDisplayName = (stepName) => {
     switch (stepName) {
       case 'ingredient':
@@ -48,18 +51,6 @@ export default function StepList({ stepName, steps }) {
     }
   }
 
-  const handleModalToggle = () => {
-    console.log(stepName)
-    switch (stepName) {
-      case 'ingredient':
-        setShowIngredientDialog(!showIngredientDialog);
-        break;
-    
-      default:
-        break;
-    }
-  }
-
   return (
     <div className="step-list-wrapper">
       <div className="display-name">{stepDisplayName(stepName)}</div>
@@ -69,16 +60,15 @@ export default function StepList({ stepName, steps }) {
         ))}
       </div>
       <div className="step-control">
-        <IconButton onClick={handleModalToggle}>
+        <IconButton onClick={() => setShowIngredientDialog(true)}>
           <AddCircle />
         </IconButton>
-        {
-          stepName==='ingredient' && <IconButton>
-          <WaterDrop />
-        </IconButton>
-        }
+        {stepName === 'ingredient' && (
+          <IconButton onClick={() => setShowIngredientWaterDialog(true)}>
+            <WaterDrop />
+          </IconButton>
+        )}
       </div>
-      <IngredientDialog isOpen={showIngredientDialog} onClose={handleModalToggle}/>
     </div>
   )
 }
