@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   FormControl,
   FormControlLabel,
   InputAdornment,
@@ -26,6 +27,10 @@ export default function IngredientDialog({ isOpen, onClose }) {
   const [shapeOptions, setShapeOptions] = useState([])
   const [weightOptions, setWeightOptions] = useState([])
   const [slot, setSlot] = useState(1)
+  const [min, setMin] = useState(0)
+  const [sec, setSec] = useState(0)
+  const [minOptions, setMinOptions] = useState([])
+  const [secOptions, setSecOptions] = useState([])
 
   const handleNameChange = (event) => {
     setName(event.target.value)
@@ -59,7 +64,41 @@ export default function IngredientDialog({ isOpen, onClose }) {
       weightOptions.push(i)
     }
     setWeightOptions(weightOptions)
+
+    const minOptions = []
+    const secOptions = []
+    for (let i = 0; i < 61; i++) {
+      minOptions.push({
+        label: i < 10 ? '0' + i : String(i),
+        value: i,
+      })
+      if (i !== 60) {
+        secOptions.push({
+          label: i < 10 ? '0' + i : String(i),
+          value: i,
+        })
+      }
+    }
+    setMinOptions(minOptions)
+    setSecOptions(secOptions)
   }, [])
+
+  const handleMinChange = (event) => {
+    console.log(event.target.value)
+    setMin(event.target.value)
+  }
+
+  const handleSecChange = (event) => {
+    setSec(event.target.value)
+  }
+
+  const handleCancel = () => {
+    onClose();
+  }
+
+  const handleSubmit = () => {
+    
+  }
 
   return (
     <Modal open={isOpen} onClose={onClose}>
@@ -122,10 +161,38 @@ export default function IngredientDialog({ isOpen, onClose }) {
                 value={item}
                 control={<Radio size="small" />}
                 label={item}
+                key={item}
               />
             ))}
           </RadioGroup>
         </FormControl>
+        <div className="min-sec">
+          <div className="label">时刻</div>
+          <FormControl className="form-2">
+            <InputLabel>分</InputLabel>
+            <Select value={min} onChange={handleMinChange} size="small">
+              {minOptions.map((item) => (
+                <MenuItem value={item.value} key={item.label}>
+                  {item.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl className="form-3">
+            <InputLabel>秒</InputLabel>
+            <Select value={sec} onChange={handleSecChange} size="small">
+              {secOptions.map((item) => (
+                <MenuItem value={item.value} key={item.label}>
+                  {item.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
+        <div>
+          <Button onClick={handleCancel}>取消</Button>
+          <Button onClick={handleSubmit}>提交</Button>
+        </div>
       </Box>
     </Modal>
   )

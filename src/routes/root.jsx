@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom'
 import '../styles/root.scss'
 import { AppBar, Toolbar, Typography } from '@mui/material'
 import { Home, MoreVert } from '@mui/icons-material'
+import MySnackbar from '@/widgets/my-snackbar'
 
 const TimeWidget = () => {
   const [time, setTime] = useState(new Date())
@@ -29,13 +30,14 @@ export default function Root() {
             <Typography>Cook Robot</Typography>
           </div>
           <div>
-            <Typography> 菜品选择</Typography>
+            <Typography>菜品选择</Typography>
           </div>
           <div className="toolbar-right">
             <TimeWidget />
             <MoreVert className="more-vert-icon" />
           </div>
         </Toolbar>
+        <MySnackbar />
       </AppBar>
       <Outlet />
     </>

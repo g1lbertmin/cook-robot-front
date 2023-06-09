@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import '@/styles/step-bar.scss'
 import { AddCircle } from '@mui/icons-material'
-import { sortBy } from '@/utils/sort-by'
+import { sortBy } from '@/utils/array'
 
 export default function StepBar({editingDish}) {
 

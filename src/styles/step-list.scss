@@ -35,7 +35,7 @@
   transform: translate(-50%, -50%);
   background-color: white;
   width: 300px;
-  height: 300px;
+  height: 400px;
   border-radius: 2px;
   display: flex;
   flex-direction: column;
@@ -65,5 +65,24 @@
     }
 
     margin-bottom: 20px;
+  }
+
+  .min-sec {
+    display: flex;
+    width: 100%;
+
+    .label { 
+      width: 80px;
+      padding-left: 20px;
+    }
+
+    .form-2 {
+      width: 70px;
+      margin-right: 20px;
+    }
+
+    .form-3 {
+      width: 70px;
+    }
   }
 }

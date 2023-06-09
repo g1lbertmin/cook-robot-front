@@ -22,7 +22,7 @@ import {
 import { Edit, Favorite, PlayArrow } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 
-import useStore from '@/store'
+import useStore from '@/use-store'
 
 export default function DishSelect() {
   const [tabValue, setTabValue] = useState(0)
