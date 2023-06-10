@@ -22,7 +22,9 @@ import {
 import { Edit, Favorite, PlayArrow } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 
-import useStore from '@/use-store'
+import appStore from '@/stores/app-store'
+import machineStore from '@/stores/machine-store'
+import { cloneDeep } from 'lodash'
 
 export default function DishSelect() {
   const [tabValue, setTabValue] = useState(0)
@@ -39,7 +41,18 @@ export default function DishSelect() {
 
   const navigate = useNavigate()
 
-  const [setEditingDish] = useStore((state) => [state.setEditingDish])
+  const [setEditingDish, setSelectedDish, setSnackbarInfo] = appStore(
+    (state) => [
+      state.setEditingDish,
+      state.setSelectedDish,
+      state.setSnackbarInfo,
+    ]
+  )
+
+  const [machineSetDish, isMachineRunning] = machineStore((state) => [
+    state.setDish,
+    state.isMachineRunning,
+  ])
 
   useEffect(() => {
     getDishesCount('').then((res) => {
@@ -146,6 +159,20 @@ export default function DishSelect() {
     )
   }
 
+  const handleFavorite = () => {}
+
+  const routeToRunningControl = () => {
+    if (isMachineRunning) {
+      setSnackbarInfo('"当前已有菜品正在炒制，请稍后')
+      return
+    } else {
+      machineSetDish(cloneDeep(dish))
+    }
+
+    setSelectedDish(dish)
+    navigate('/running')
+  }
+
   return (
     <div className="dish-select-wrapper">
       <SearchBox />
@@ -175,7 +202,7 @@ export default function DishSelect() {
       ></Pagination>
       {dish && (
         <Modal open={open} onClose={() => setOpen(false)}>
-          <Box className="modal-box">
+          <Box className="dish-modal-box">
             <img src={dish.image} />
             <div className="dish-detail">
               <div className="line-1">
@@ -199,10 +226,10 @@ export default function DishSelect() {
               <IconButton onClick={handleEditDish}>
                 <Edit className="edit-icon" />
               </IconButton>
-              <IconButton>
+              <IconButton onClick={handleFavorite}>
                 <Favorite className="favorite-icon" />
               </IconButton>
-              <IconButton>
+              <IconButton onClick={routeToRunningControl}>
                 <PlayArrow className="play-arrow-icon" />
               </IconButton>
             </div>

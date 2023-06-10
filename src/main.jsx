@@ -8,6 +8,7 @@ import DishEdit from './routes/dish-edit'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import MainMenu from './routes/main-menu'
+import RunningControl from './routes/running-control'
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <MainMenu />,
+      },
+      {
+        path: '/running',
+        element: <RunningControl />
       },
       {
         path: '/dish-select',

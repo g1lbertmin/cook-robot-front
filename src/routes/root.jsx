@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react'
 
 import { Outlet } from 'react-router-dom'
 import '../styles/root.scss'
-import { AppBar, Toolbar, Typography } from '@mui/material'
+import { AppBar, IconButton, Toolbar, Typography } from '@mui/material'
 import { Home, MoreVert } from '@mui/icons-material'
 import MySnackbar from '@/widgets/my-snackbar'
+import { useNavigate } from 'react-router-dom'
 
 const TimeWidget = () => {
   const [time, setTime] = useState(new Date())
@@ -21,12 +22,16 @@ const TimeWidget = () => {
 }
 
 export default function Root() {
+  const navigate = useNavigate()
+
   return (
     <>
       <AppBar className="appbar">
         <Toolbar className="toolbar">
           <div className="toolbar-left">
-            <Home className="home-icon" />
+            <IconButton onClick={() => navigate('/')} className='icon-btn'>
+              <Home className="home-icon" />
+            </IconButton>
             <Typography>Cook Robot</Typography>
           </div>
           <div>

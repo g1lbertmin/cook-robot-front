@@ -1,8 +1,8 @@
 import { Alert, Snackbar } from '@mui/material'
-import useStore from '@/use-store'
+import appStore from '@/stores/app-store'
 
 export default function MySnackbar() {
-  const [snackbarOpen, snackbarInfo, closeSnackbar] = useStore((state) => [
+  const [snackbarOpen, snackbarInfo, closeSnackbar] = appStore((state) => [
     state.snackbarOpen,
     state.snackbarInfo,
     state.closeSnackbar,

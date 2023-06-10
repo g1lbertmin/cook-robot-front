@@ -14,7 +14,7 @@ import {
 import { useEffect, useState } from 'react'
 import { getIngredients } from '@/api/ingredient'
 import { getShapes } from '@/api/ingredient'
-import useStore from '@/use-store'
+import appStore from '@/stores/app-store'
 import '@/styles/ingredient-dialog.scss'
 import TimeSelect from './time-select'
 
@@ -23,7 +23,7 @@ const WEIGHT_MIN = 10,
   WEIGHT_STEP = 10
 
 export default function IngredientDialog() {
-  const [isOpen, setOpen] = useStore((state) => [
+  const [isOpen, setOpen] = appStore((state) => [
     state.showIngredientDialog,
     state.setShowIngredientDialog,
   ])

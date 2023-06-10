@@ -1,6 +1,6 @@
 import '@/styles/dish-edit.scss'
 import StepBar from '@/widgets/step-bar'
-import useStore from '@/use-store'
+import appStore from '@/stores/app-store'
 import { Button } from '@mui/material'
 import StepList from '@/widgets/step-list'
 import { sortBy } from '@/utils/array'
@@ -10,7 +10,7 @@ import IngredientWaterDialog from '@/widgets/ingredient-water-dialog'
 import { useState } from 'react'
 
 export default function DishEdit() {
-  const [editingDish] = useStore((state) => [state.editingDish])
+  const [editingDish] = appStore((state) => [state.editingDish])
 
   const [dishNameDialogOpen, setDishNameDialogOpen] = useState(false)
   const [showIngredientDialog, setShowIngredientDialog] = useState(false)

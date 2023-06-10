@@ -1,12 +1,12 @@
 import { Box, Button, Modal, TextField } from '@mui/material'
 import '@/styles/dish-name-dialog.scss'
 import { useEffect, useState } from 'react'
-import useStore from '@/use-store'
+import appStore from '@/stores/app-store'
 import { createDish, updateDish } from '@/api/dish'
 import { sortBy } from '@/utils/array'
 
 export default function DishNameDialog({ isOpen, handleClose }) {
-  const [editingDish, setSnackbarInfo] = useStore((state) => [
+  const [editingDish, setSnackbarInfo] = appStore((state) => [
     state.editingDish,
     state.setSnackbarInfo,
   ])

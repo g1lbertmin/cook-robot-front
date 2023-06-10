@@ -2,10 +2,10 @@ import '@/styles/step-list.scss'
 import { secondsToMMSS } from '@/utils/time-format'
 import { IconButton } from '@mui/material'
 import { AddCircle, WaterDrop } from '@mui/icons-material'
-import useStore from '../use-store'
+import appStore from '@/stores/app-store'
 
 export default function StepList({ stepName, steps }) {
-  const [setShowIngredientDialog, setShowIngredientWaterDialog] = useStore(
+  const [setShowIngredientDialog, setShowIngredientWaterDialog] = appStore(
     (state) => [
       state.setShowIngredientDialog,
       state.setShowIngredientWaterDialog,

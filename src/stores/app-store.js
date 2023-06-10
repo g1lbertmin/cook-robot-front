@@ -1,9 +1,14 @@
 import { create } from 'zustand'
 
-const useStore = create((set) => ({
+const appStore = create((set) => ({
   editingDish: null,
   setEditingDish: (dish) => {
     set({ editingDish: dish })
+  },
+
+  selectedDish: null,
+  setSelectedDish: (dish) => {
+    set({ selectedDish: dish })
   },
 
   snackbarOpen: false,
@@ -31,16 +36,16 @@ const useStore = create((set) => ({
   showIngredientDialog: false,
   setShowIngredientDialog: (show) => {
     set({
-      showIngredientDialog: show
+      showIngredientDialog: show,
     })
   },
 
   showIngredientWaterDialog: false,
   setShowIngredientWaterDialog: (show) => {
     set({
-      showIngredientWaterDialog: show
+      showIngredientWaterDialog: show,
     })
-  }
+  },
 }))
 
-export default useStore
+export default appStore

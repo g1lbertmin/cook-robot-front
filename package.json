@@ -10,10 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.0",
+    "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.11.16",
-    "@mui/material": "^5.13.3",
+    "@mui/material": "^5.13.4",
+    "@mui/system": "^5.13.2",
     "axios": "^1.4.0",
     "immer": "^10.0.2",
     "lodash": "^4.17.21",

@@ -8,7 +8,7 @@ import {
   Select,
 } from '@mui/material'
 import '@/styles/ingredient-water-dialog.scss'
-import useStore from '@/use-store'
+import appStore from '@/stores/app-store'
 import { useEffect, useState } from 'react'
 import TimeSelect from './time-select'
 import { sortBy } from '@/utils/array'
@@ -19,7 +19,7 @@ const WEIGHT_MIN = 10,
   WEIGHT_STEP = 10
 
 export default function IngredientWaterDialog() {
-  const [isOpen, setOpen, dish, setDish] = useStore((state) => [
+  const [isOpen, setOpen, dish, setDish] = appStore((state) => [
     state.showIngredientWaterDialog,
     state.setShowIngredientWaterDialog,
     state.editingDish,

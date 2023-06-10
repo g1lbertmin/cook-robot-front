@@ -1,0 +1,27 @@
+.control-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .cook-time {
+    color: #1976d2; 
+    margin: 20px 0 20px;
+  }
+
+  .buttons-wrapper {
+    margin: 20px 0 20px;
+    display: flex;
+    justify-content: space-between;
+    width: 80vw;
+  }
+}
+
+.progress-wrapper {
+  position: relative;
+  margin-top: 25px;
+  width: 50vw;
+  height: 50vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
