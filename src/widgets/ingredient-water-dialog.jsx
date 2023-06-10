@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react'
 import TimeSelect from './time-select'
 import { sortBy } from '@/utils/array'
 import { produce } from 'immer'
+import { cloneDeep } from 'lodash'
 
 const WEIGHT_MIN = 10,
   WEIGHT_MAX = 1000,
@@ -39,13 +40,12 @@ export default function IngredientWaterDialog() {
       key: Date.now(),
       type: 'water',
     }
-    console.log('dish: ', dish)
     const newDish = produce(dish, draft => {
       draft.steps.ingredients.push(newStep)
       draft.steps.ingredients.sort(sortBy('time', 1))
     })
     console.log('newDish: ', newDish)
-    setDish(newDish)
+    setDish(cloneDeep(newDish))
   }
 
   useEffect(() => {

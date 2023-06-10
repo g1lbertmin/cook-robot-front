@@ -146,6 +146,7 @@ export default function DishSelect() {
   const DishCard = ({ dish }) => {
     const handleClickCard = () => {
       getDish(dish.id).then((res) => {
+        console.log('set dish: ', res.data)
         setDish(res.data)
         setOpen(true)
       })
@@ -164,7 +165,7 @@ export default function DishSelect() {
   const routeToRunningControl = () => {
     if (isMachineRunning) {
       setSnackbarInfo('"当前已有菜品正在炒制，请稍后')
-      return
+      // return
     } else {
       machineSetDish(cloneDeep(dish))
     }

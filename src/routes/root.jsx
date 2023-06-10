@@ -6,9 +6,20 @@ import { AppBar, IconButton, Toolbar, Typography } from '@mui/material'
 import { Home, MoreVert } from '@mui/icons-material'
 import MySnackbar from '@/widgets/my-snackbar'
 import { useNavigate } from 'react-router-dom'
+import machineStore from '@/stores/machine-store'
 
 const TimeWidget = () => {
+  const [update] = machineStore((state) => [state.update])
   const [time, setTime] = useState(new Date())
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      update()
+    }, 1000)
+    return () => {
+      clearInterval(interval)
+    }
+  }, [update])
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000)
@@ -29,7 +40,7 @@ export default function Root() {
       <AppBar className="appbar">
         <Toolbar className="toolbar">
           <div className="toolbar-left">
-            <IconButton onClick={() => navigate('/')} className='icon-btn'>
+            <IconButton onClick={() => navigate('/')} className="icon-btn">
               <Home className="home-icon" />
             </IconButton>
             <Typography>Cook Robot</Typography>

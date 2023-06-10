@@ -1,7 +1,7 @@
-import { Button, CircularProgress, IconButton } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { Button, CircularProgress, IconButton, Slider } from '@mui/material'
+import { useEffect, useRef, useState } from 'react'
 import '@/styles/control-panel.scss'
-import { PlayArrow } from '@mui/icons-material'
+import { HourglassBottom, PlayArrow } from '@mui/icons-material'
 import machineStore from '@/stores/machine-store'
 import { postCommand } from '../api/command'
 import { Command, createSingleInstruction } from './command'
@@ -10,16 +10,28 @@ import { useNavigate } from 'react-router-dom'
 
 export default function ControlPanel() {
   const [progress, setProgress] = useState(40)
-  const [runningTime, dish, setMachineRunningState, update] = machineStore(
-    (state) => [
-      state.runningTime,
-      state.dish,
-      state.setMachineRunningState,
-      state.update,
-    ]
-  )
+  const [fireLevel, setFireLevel] = useState(0)
+  const [
+    machineData,
+    runningTime,
+    dish,
+    isMachineRunning,
+    isCookFinished,
+    setMachineRunningState,
+    update,
+  ] = machineStore((state) => [
+    state.data,
+    state.runningTime,
+    state.dish,
+    state.isMachineRunning,
+    state.isCookFinished,
+    state.setMachineRunningState,
+    state.update,
+  ])
 
   const navigate = useNavigate()
+
+  const flagRef = useRef(true)
 
   const startBtnClick = async () => {
     const steps = dish.steps
@@ -134,19 +146,72 @@ export default function ControlPanel() {
           thickness={8}
           sx={{ color: '#dddddd', position: 'absolute', zIndex: 1 }}
         />
-        <IconButton
-          sx={{ zIndex: 3, width: '100px', height: '100px' }}
-          onClick={startBtnClick}
-        >
-          <PlayArrow sx={{ fontSize: '50px' }} />
-        </IconButton>
+        {isCookFinished ? (
+          <div className="finish">完成</div>
+        ) : (
+          <IconButton
+            sx={{ zIndex: 3, width: '100px', height: '100px' }}
+            onClick={startBtnClick}
+          >
+            {isMachineRunning ? (
+              <HourglassBottom sx={{ fontSize: '50px' }} />
+            ) : (
+              <PlayArrow sx={{ fontSize: '50px' }} />
+            )}
+          </IconButton>
+        )}
       </div>
     )
   }
 
   useEffect(() => {
-    console.log('zzz: ', dish)
-  }, [dish])
+    setProgress((runningTime * 100) / dish.cook_time)
+  }, [runningTime])
+
+  const marks = [...new Array(11).keys()].map((item) => ({
+    value: item,
+    label: item,
+  }))
+
+  // why execute twice?
+  const handleSliderClick = async (event, value) => {
+    const newValue = value
+    console.log('newValue: ', newValue)
+
+    if (flagRef.current) {
+      flagRef.current = false
+      setTimeout(() => {
+        flagRef.current = true
+      }, 500)
+    } else {
+      return
+    }
+
+    const immediateCommand = new Command('immediate')
+    console.log('value: ', value)
+    const instruction = createSingleInstruction('fire', 0, 'on', value, 0)
+    immediateCommand.add(instruction)
+    try {
+      console.log('change fire: ', immediateCommand.getData())
+      const res = await postCommand(immediateCommand.getData())
+      console.log('did it')
+      console.log(res)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const onStopBtnClick = async () => {
+    const immediateCommand = new Command('immediate')
+    const instruction = createSingleInstruction('stop', 0, 'on', 0, 0)
+    immediateCommand.add(instruction)
+    try {
+      const res = await postCommand(immediateCommand.getData())
+      console.log(res)
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   return (
     <div className="control-panel">
@@ -154,17 +219,47 @@ export default function ControlPanel() {
       <div className="cook-time">
         {secondsToMMSS(runningTime)}/{secondsToMMSS(dish.cook_time)}
       </div>
-      <div>
-        <Button variant="contained" onClick={() => navigate('/dish-select')}>
-          重新选择
+      {isMachineRunning && (
+        <div>当前温度：{machineData.temperature_infrared_number}</div>
+      )}
+      {isMachineRunning && (
+        <div className="fire-wrapper">
+          <div className="fire-label">火力</div>
+          <Slider
+            value={machineData.temperature_target_number / 200}
+            step={1}
+            min={0}
+            max={10}
+            marks={marks}
+            onChange={handleSliderClick}
+          />
+        </div>
+      )}
+      {isMachineRunning && (
+        <Button
+          variant="contained"
+          onClick={onStopBtnClick}
+          color="warning"
+          sx={{ marginTop: '20px' }}
+        >
+          紧急停机
         </Button>
-      </div>
-      <div className='buttons-wrapper'>
-        <Button variant="contained">出菜</Button>
-        <Button variant="contained">清洗</Button>
-        <Button variant="contained">复位0</Button>
-        <Button variant="contained">复位1</Button>
-      </div>
+      )}
+      {!isMachineRunning && (
+        <div>
+          <Button variant="contained" onClick={() => navigate('/dish-select')}>
+            重新选择
+          </Button>
+        </div>
+      )}
+      {!isMachineRunning && (
+        <div className="buttons-wrapper">
+          <Button variant="contained">出菜</Button>
+          <Button variant="contained">清洗</Button>
+          <Button variant="contained">复位0</Button>
+          <Button variant="contained">复位1</Button>
+        </div>
+      )}
     </div>
   )
 }

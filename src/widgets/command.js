@@ -1,4 +1,4 @@
-import { sortBy } from 'lodash'
+import { sortBy } from '@/utils/array'
 
 export class Command {
   constructor(model) {
