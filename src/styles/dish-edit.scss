@@ -1,3 +1,5 @@
+@import './mixins.scss';
+
 .dish-edit-wrapper {
   width: 370px;
   position: absolute;
@@ -22,6 +24,23 @@
       line-height: 26px;
       font-weight: bold;
       margin-bottom: 15px;
+      height: 26px;
     }
+  }
+}
+
+.confirm-clear-wrapper {
+  @extend .modal-box;
+
+  width: 250px;
+  .content {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+  .button-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
   }
 }

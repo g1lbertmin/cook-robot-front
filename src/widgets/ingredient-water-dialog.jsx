@@ -42,7 +42,6 @@ export default function IngredientWaterDialog({ isOpen, setOpen, type }) {
       draft.steps.ingredients.push(newStep)
       draft.steps.ingredients.sort(sortBy('time', 1))
     })
-    console.log('newDish: ', newDish)
     setDish(cloneDeep(newDish))
   }
 

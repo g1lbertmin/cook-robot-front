@@ -4,8 +4,7 @@ import { AddCircle } from '@mui/icons-material'
 import { sortBy } from '@/utils/array'
 import { cloneDeep } from 'lodash'
 
-export default function StepBar({editingDish}) {
-
+export default function StepBar({ editingDish }) {
   const [stepLine, setStepLine] = useState([])
   useEffect(() => {
     console.log(editingDish)
@@ -20,7 +19,7 @@ export default function StepBar({editingDish}) {
     }
     line.sort(sortBy('time', 1))
     const finish = cloneSteps['finish'][0]
-    console.log('finish: ',finish, line)
+    console.log('finish: ', finish, line)
     finish.time = line[line.length - 1].time + 10
     line.push(finish)
     console.log('line', line)
@@ -44,7 +43,13 @@ export default function StepBar({editingDish}) {
             <div className="step-content">{item.name}</div>
             <div className="step-time">{formatSecondsToTime(item.time)}</div>
           </div>
-          {index !== stepLine.length - 1 && <div className="divider" key={`${index}-divider`}/>}
+          {index !== stepLine.length - 1 && (
+            <div
+              className="divider"
+              key={`${index}-divider`}
+              style={{ width: stepLine.length === 2 ? '39vw': '13vw' }}
+            />
+          )}
         </>
       ))}
     </div>
