@@ -24,7 +24,7 @@ import { useNavigate } from 'react-router-dom'
 
 import appStore from '@/stores/app-store'
 import machineStore from '@/stores/machine-store'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, debounce } from 'lodash'
 
 export default function DishSelect() {
   const [tabValue, setTabValue] = useState(0)
@@ -38,6 +38,8 @@ export default function DishSelect() {
 
   const [open, setOpen] = useState(false)
   const [dish, setDish] = useState(null)
+
+  const [searchedDishInitials, setSearchedDishInitials] = useState('')
 
   const navigate = useNavigate()
 
@@ -72,25 +74,22 @@ export default function DishSelect() {
 
   const handleTabValueChange = (_event, newValue) => {
     setTabValue(newValue)
+    setPage(1)
 
     if (newValue === 0) {
-      getDishesCount('').then((res) => {
+      getDishesCount(searchedDishInitials).then((res) => {
         setPageCount(res.data)
       })
 
-      setPage(1)
-
-      getDishes(1, 10, '').then((res) => {
+      getDishes(1, 10, searchedDishInitials).then((res) => {
         setDishes(res.data)
       })
     } else if (newValue === 1) {
-      getStarredDishesCount('').then((res) => {
+      getStarredDishesCount(searchedDishInitials).then((res) => {
         setPageCount(res.data)
       })
 
-      setPage(1)
-
-      getStarredDishes(1, 10, '').then((res) => {
+      getStarredDishes(1, 10, searchedDishInitials).then((res) => {
         setStarredDishes(res.data)
       })
     }
@@ -100,11 +99,11 @@ export default function DishSelect() {
     setPage(newValue)
 
     if (tabValue === 0) {
-      getDishes(newValue, 10, '').then((res) => {
+      getDishes(newValue, 10, searchedDishInitials).then((res) => {
         setDishes(res.data)
       })
     } else if (tabValue === 1) {
-      getStarredDishes(newValue, 10, '').then((res) => {
+      getStarredDishes(newValue, 10, searchedDishInitials).then((res) => {
         setStarredDishes(res.data)
       })
     }
@@ -125,15 +124,34 @@ export default function DishSelect() {
     navigate('/dish-edit')
   }
 
-  // ===== wigets =====
-
-  const SearchBox = () => {
-    return (
-      <div className="search-box-wrapper">
-        <TextField placeholder="输入菜品名称首字母搜索" fullWidth></TextField>
-      </div>
-    )
+  const handleInputChange = (event) => {
+    const newValue = event.target.value
+    setSearchedDishInitials(newValue)
+    console.log('new value: ', newValue)
+    handleInputChangeDebounce(newValue)
   }
+
+  const handleInputChangeDebounce = debounce((value) => {
+    getDishesCount(value).then((res) => {
+      setPageCount(res.data)
+      setDishCount(res.data)
+    })
+
+    getStarredDishesCount(value).then((res) => {
+      setStarredDishCount(res.data)
+    })
+
+    if (tabValue === 0) {
+      getDishes(page, 10, value).then((res) => {
+        console.log('here')
+        setDishes(res.data)
+      })
+    } else if (tabValue === 1) {
+      getStarredDishes(page, 10, value).then((res) => {
+        setStarredDishes(res.data)
+      })
+    }
+  }, 500)
 
   const TabPanel = ({ children, value, index }) => {
     return (
@@ -146,7 +164,7 @@ export default function DishSelect() {
   const DishCard = ({ dish }) => {
     const handleClickCard = () => {
       getDish(dish.id).then((res) => {
-        console.log('set dish: ', res.data)
+        console.log(res.data)
         setDish(res.data)
         setOpen(true)
       })
@@ -176,7 +194,14 @@ export default function DishSelect() {
 
   return (
     <div className="dish-select-wrapper">
-      <SearchBox />
+      <div className="search-box-wrapper">
+        <TextField
+          placeholder="输入菜品名称首字母搜索"
+          fullWidth
+          value={searchedDishInitials}
+          onChange={handleInputChange}
+        ></TextField>
+      </div>
       <Tabs value={tabValue} onChange={handleTabValueChange} className="tabs">
         <Tab label={`预制菜品（${dishCount}）`} className="tab" />
         <Tab label={`收藏菜品（${starredDishCount}）`} className="tab" />

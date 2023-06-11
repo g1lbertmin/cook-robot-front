@@ -8,7 +8,6 @@ export default function TimeSelect({ min, setMin, sec, setSec }) {
   const [secOptions, setSecOptions] = useState([])
 
   const handleMinChange = (event) => {
-    console.log(event.target.value)
     setMin(event.target.value)
   }
 

@@ -58,3 +58,10 @@ export function createDish(dish) {
     data: { dish: dish },
   })
 }
+
+export function getSeasonings() {
+  return api({
+    url: "/seasonings",
+    method: "get"
+  });
+}

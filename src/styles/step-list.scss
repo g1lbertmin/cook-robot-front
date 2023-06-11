@@ -17,6 +17,13 @@
     font-size: 14px;
     line-height: 22px;
     padding: 10px;
+
+    .list-item-wrap {
+      height: 35px;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+    }
   }
 
   .step-control {

@@ -1,0 +1,23 @@
+@import './mixins.scss';
+
+.stir-fry-modal-box {
+ @extend .modal-box;
+
+ width: 250px;
+ height: 250px;
+
+ .title {
+  font-size: 22px;
+  margin-bottom: 20px;
+ }
+ 
+ .gear-wrap {
+  margin-bottom: 20px;
+ }
+
+ .button-wrap {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+ }
+}

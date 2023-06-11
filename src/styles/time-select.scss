@@ -1,13 +1,14 @@
 .min-sec {
   display: flex;
   width: 100%;
+  align-items: center;
 
   .label { 
-    width: 100px;
+    width: 70px;
   }
 
   .form-2 {
-    width:85px;
+    width:100px;
     margin-right: 30px;
 
     .min-label {
@@ -16,7 +17,7 @@
   }
 
   .form-3 {
-    width: 85px;
+    width: 100px;
 
     .sec-label {
       background-color: white;

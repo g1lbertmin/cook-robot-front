@@ -17,15 +17,23 @@ import { getShapes } from '@/api/ingredient'
 import appStore from '@/stores/app-store'
 import '@/styles/ingredient-dialog.scss'
 import TimeSelect from './time-select'
+import { sortBy } from '@/utils/array'
+import { produce } from 'immer'
 
 const WEIGHT_MIN = 10,
   WEIGHT_MAX = 1000,
   WEIGHT_STEP = 10
 
-export default function IngredientDialog() {
-  const [isOpen, setOpen] = appStore((state) => [
-    state.showIngredientDialog,
-    state.setShowIngredientDialog,
+export default function IngredientDialog({
+  isOpen,
+  setOpen,
+  type,
+  step,
+  index,
+}) {
+  const [dish, setDish] = appStore((state) => [
+    state.editingDish,
+    state.setEditingDish,
   ])
   const [name, setName] = useState('')
   const [shape, setShape] = useState('')
@@ -55,12 +63,10 @@ export default function IngredientDialog() {
 
   useEffect(() => {
     getIngredients().then((res) => {
-      console.log(res.data)
       setIngredients(res.data)
     })
 
     getShapes().then((res) => {
-      console.log(res.data)
       setShapeOptions(res.data)
     })
 
@@ -71,11 +77,59 @@ export default function IngredientDialog() {
     setWeightOptions(weightOptions)
   }, [])
 
+  useEffect(() => {
+
+    if (type === 'update') {
+      setName(step.name)
+      setShape(step.shape)
+      setWeight(step.weight)
+      setSlot(step.slot)
+      setMin(Math.floor(step.time / 60))
+      setSec(step.time % 60)
+    }
+  }, [isOpen])
+
   const handleCancel = () => {
     setOpen(false)
   }
 
-  const handleSubmit = () => {}
+  const handleSubmit = () => {
+    if (type === 'create') {
+      const newStep = {
+        name,
+        shape,
+        weight,
+        slot,
+        time: sec * 60 + sec,
+        key: Date.now(),
+        type: 'ingredient',
+      }
+      const newDish = produce(dish, (draft) => {
+        draft.steps.ingredients.push(newStep)
+        draft.steps.ingredients.sort(sortBy('time', 1))
+      })
+      setDish(newDish)
+    } else if (type === 'update') {
+
+      const newStep = produce(step, (draft) => {
+        draft.name = name
+        draft.shape = shape
+        draft.weight = weight
+        draft.slot = slot
+        draft.time = min * 60 + sec
+      })
+
+      const newDish = produce(dish, (draft) => {
+        const ingredients = draft.steps.ingredients
+        ingredients[index] = newStep
+        ingredients.sort(sortBy('time', 1))
+      })
+
+      setDish(newDish)
+    }
+
+    setOpen(false)
+  }
 
   return (
     <Modal open={isOpen} onClose={() => setOpen(false)}>
@@ -90,7 +144,7 @@ export default function IngredientDialog() {
             size="small"
           >
             {ingredientOptions.map((option, index) => (
-              <MenuItem value={option.id} key={option.id}>
+              <MenuItem value={option.name} key={option.id}>
                 {option.name}
               </MenuItem>
             ))}

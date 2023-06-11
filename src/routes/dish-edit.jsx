@@ -8,14 +8,24 @@ import DishNameDialog from '@/widgets/dish-name-dialog'
 import IngredientDialog from '@/widgets/ingredient-dialog'
 import IngredientWaterDialog from '@/widgets/ingredient-water-dialog'
 import { useState } from 'react'
+import SeasoningDialog from '../widgets/seasoning-dialog'
+import FireDialog from '../widgets/fire-dialog'
+import StirFryDialog from '../widgets/stir-fry-dialog'
 
 export default function DishEdit() {
   const [editingDish] = appStore((state) => [state.editingDish])
 
   const [dishNameDialogOpen, setDishNameDialogOpen] = useState(false)
-  const [showIngredientDialog, setShowIngredientDialog] = useState(false)
-  const [showIngredientWaterDialog, setShowIngredientWaterDialog] =
-    useState(false)
+  const [ingredientDialogShow, setIngredientDialogShow] = useState(false)
+  const [ingredientWaterDialogShow, setIngredientWaterShow] = useState(false)
+  const [seasoningDialogShow, setSeasoningDialogShow] = useState(false)
+  const [fireDialogShow, setFireDialogShow] = useState(false)
+  const [stirFryDialogShow, setStirFryDialogShow] = useState(false)
+  // 'create' or 'update'
+  const [dialogType, setDialogType] = useState('create')
+
+  const [step, setStep] = useState(null)
+  const [index, setIndex] = useState(-1)
 
   const handleSaveSteps = () => {
     const stepsList = []
@@ -26,18 +36,34 @@ export default function DishEdit() {
       stepsList.sort(sortBy('time', 1))
     }
     if (stepsList.length === 0) {
-      // notify
-
-      // $q.notify({
-      //   message: "未添加步骤",
-      //   position: "top",
-      //   color: "orange",
-      //   timeout: 500,
-      // });
       return
     }
 
     setDishNameDialogOpen(true)
+  }
+
+  const handleShowDialog = (stepType, show, step, index) => {
+    if (step !== undefined && index !== undefined) {
+      setStep(step)
+      setIndex(index)
+    }
+    switch (stepType) {
+      case 'ingredient':
+        setIngredientDialogShow(show)
+        return
+      case 'water':
+        setIngredientWaterShow(show)
+        return
+      case 'seasoning':
+        setSeasoningDialogShow(show)
+        return
+      case 'fire':
+        setFireDialogShow(show)
+        return
+      case 'stir_fry':
+        setStirFryDialogShow(show)
+        return
+    }
   }
 
   return (
@@ -55,16 +81,79 @@ export default function DishEdit() {
           </Button>
         </div>
       </div>
-      <StepList stepName="ingredient" steps={editingDish.steps.ingredients} />
-      <StepList stepName="seasoning" steps={editingDish.steps.seasonings} />
-      <StepList stepName="fire" steps={editingDish.steps.fires} />
-      <StepList stepName="stir_fry" steps={editingDish.steps.stir_fries} />
+      <StepList
+        stepName="ingredient"
+        steps={editingDish.steps.ingredients}
+        handleShowDialog={handleShowDialog}
+        setType={setDialogType}
+      />
+      <StepList
+        stepName="seasoning"
+        steps={editingDish.steps.seasonings}
+        handleShowDialog={handleShowDialog}
+        setType={setDialogType}
+      />
+      <StepList
+        stepName="fire"
+        steps={editingDish.steps.fires}
+        handleShowDialog={handleShowDialog}
+        setType={setDialogType}
+      />
+      <StepList
+        stepName="stir_fry"
+        steps={editingDish.steps.stir_fries}
+        handleShowDialog={handleShowDialog}
+        setType={setDialogType}
+      />
       <DishNameDialog
         isOpen={dishNameDialogOpen}
         handleClose={() => setDishNameDialogOpen(false)}
       />
-      <IngredientDialog />
-      <IngredientWaterDialog />
+      {ingredientDialogShow && (
+        <IngredientDialog
+          isOpen={ingredientDialogShow}
+          setOpen={setIngredientDialogShow}
+          type={dialogType}
+          step={step}
+          index={index}
+        />
+      )}
+      {ingredientWaterDialogShow && (
+        <IngredientWaterDialog
+          isOpen={ingredientWaterDialogShow}
+          setOpen={setIngredientWaterShow}
+          type={dialogType}
+          step={step}
+          index={index}
+        />
+      )}
+      {seasoningDialogShow && (
+        <SeasoningDialog
+          isOpen={seasoningDialogShow}
+          setOpen={setSeasoningDialogShow}
+          type={dialogType}
+          step={step}
+          index={index}
+        />
+      )}
+      {fireDialogShow && (
+        <FireDialog
+          isOpen={fireDialogShow}
+          setOpen={setFireDialogShow}
+          type={dialogType}
+          step={step}
+          index={index}
+        />
+      )}
+      {stirFryDialogShow && (
+        <StirFryDialog
+          isOpen={stirFryDialogShow}
+          setOpen={setStirFryDialogShow}
+          type={dialogType}
+          step={step}
+          index={index}
+        />
+      )}
     </div>
   )
 }

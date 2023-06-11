@@ -1,9 +1,23 @@
 import { create } from 'zustand'
+import { getDish } from '@/api/dish'
 
-const appStore = create((set) => ({
+const appStore = create((set, get) => ({
   editingDish: null,
   setEditingDish: (dish) => {
     set({ editingDish: dish })
+  },
+
+  updateDishInfo: async (type = 'update', id) => {
+    const state = get()
+    if (type === 'update') {
+      getDish(state.editingDish.id).then((res) => {
+        state.setEditingDish(res.data)
+      })
+    } else if (type === 'create') {
+      getDish(id).then((res) => {
+        state.setEditingDish(res.data)
+      })
+    }
   },
 
   selectedDish: null,
@@ -30,20 +44,6 @@ const appStore = create((set) => ({
     set({
       snackbarOpen: true,
       snackbarInfo: info,
-    })
-  },
-
-  showIngredientDialog: false,
-  setShowIngredientDialog: (show) => {
-    set({
-      showIngredientDialog: show,
-    })
-  },
-
-  showIngredientWaterDialog: false,
-  setShowIngredientWaterDialog: (show) => {
-    set({
-      showIngredientWaterDialog: show,
     })
   },
 }))

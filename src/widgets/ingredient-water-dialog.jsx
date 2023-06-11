@@ -19,10 +19,8 @@ const WEIGHT_MIN = 10,
   WEIGHT_MAX = 1000,
   WEIGHT_STEP = 10
 
-export default function IngredientWaterDialog() {
-  const [isOpen, setOpen, dish, setDish] = appStore((state) => [
-    state.showIngredientWaterDialog,
-    state.setShowIngredientWaterDialog,
+export default function IngredientWaterDialog({ isOpen, setOpen, type }) {
+  const [dish, setDish] = appStore((state) => [
     state.editingDish,
     state.setEditingDish,
   ])
@@ -40,7 +38,7 @@ export default function IngredientWaterDialog() {
       key: Date.now(),
       type: 'water',
     }
-    const newDish = produce(dish, draft => {
+    const newDish = produce(dish, (draft) => {
       draft.steps.ingredients.push(newStep)
       draft.steps.ingredients.sort(sortBy('time', 1))
     })

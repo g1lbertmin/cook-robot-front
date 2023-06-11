@@ -1,16 +1,28 @@
 import '@/styles/step-list.scss'
 import { secondsToMMSS } from '@/utils/time-format'
 import { IconButton } from '@mui/material'
-import { AddCircle, WaterDrop } from '@mui/icons-material'
+import { AddCircle, Delete, WaterDrop } from '@mui/icons-material'
 import appStore from '@/stores/app-store'
+import { produce } from 'immer'
 
-export default function StepList({ stepName, steps }) {
-  const [setShowIngredientDialog, setShowIngredientWaterDialog] = appStore(
-    (state) => [
-      state.setShowIngredientDialog,
-      state.setShowIngredientWaterDialog,
-    ]
-  )
+const STEP_TYPE_MAP = new Map([
+  ['ingredient', 'ingredients'],
+  ['seasoning', 'seasonings'],
+  ['fire', 'fires'],
+  ['stir_fry', 'stir_fries'],
+])
+
+export default function StepList({
+  stepName,
+  steps,
+  handleShowDialog,
+  setType,
+}) {
+  const [dish, setDish] = appStore((state) => [
+    state.editingDish,
+    state.setEditingDish,
+  ])
+
   const stepDisplayName = (stepName) => {
     switch (stepName) {
       case 'ingredient':
@@ -51,21 +63,51 @@ export default function StepList({ stepName, steps }) {
     }
   }
 
+  const handleClickStep = (step, index) => {
+    setType('update')
+    handleShowDialog(step.type, true, step, index)
+  }
+
+  const handleDelete = (index) => {
+    const type = STEP_TYPE_MAP.get(stepName)
+    const newDish = produce(dish, (draft) => {
+      draft['steps'][type].splice(index, 1)
+    })
+    setDish(newDish)
+  }
+
   return (
     <div className="step-list-wrapper">
       <div className="display-name">{stepDisplayName(stepName)}</div>
       <div className="step-content">
         {steps.map((step, index) => (
-          <div key={index}>{listItemDisplayName(step)}</div>
+          <div className="list-item-wrap">
+            <div key={index} onClick={() => handleClickStep(step, index)}>
+              {listItemDisplayName(step)}
+            </div>
+            <IconButton onClick={() => handleDelete(index)}>
+              <Delete sx={{ fontSize: '14px', color: '#aaa' }} />
+            </IconButton>
+          </div>
         ))}
       </div>
       <div className="step-control">
-        <IconButton onClick={() => setShowIngredientDialog(true)}>
+        <IconButton
+          onClick={() => {
+            setType('create')
+            handleShowDialog(stepName, true)
+          }}
+        >
           <AddCircle />
         </IconButton>
         {stepName === 'ingredient' && (
-          <IconButton onClick={() => setShowIngredientWaterDialog(true)}>
-            <WaterDrop />
+          <IconButton
+            onClick={() => {
+              setType('create')
+              handleShowDialog('water', true)
+            }}
+          >
+            <WaterDrop sx={{ color: '#1976d2' }} />
           </IconButton>
         )}
       </div>

@@ -6,9 +6,10 @@ import { createDish, updateDish } from '@/api/dish'
 import { sortBy } from '@/utils/array'
 
 export default function DishNameDialog({ isOpen, handleClose }) {
-  const [editingDish, setSnackbarInfo] = appStore((state) => [
+  const [editingDish, setSnackbarInfo, updateDishInfo] = appStore((state) => [
     state.editingDish,
     state.setSnackbarInfo,
+    state.updateDishInfo,
   ])
   const [name, setName] = useState('')
 
@@ -27,6 +28,12 @@ export default function DishNameDialog({ isOpen, handleClose }) {
       stepsList.sort(sortBy('time', 1))
     }
 
+    if (stepsList.length === 0) {
+      setSnackbarInfo('未添加步骤')
+      handleClose()
+      return
+    }
+
     const newDish = {
       name,
       cook_time: stepsList[stepsList.length - 1].time,
@@ -37,10 +44,13 @@ export default function DishNameDialog({ isOpen, handleClose }) {
     const res = await createDish(newDish)
 
     if (res.data.success) {
+      const id = res.data.id
       setSnackbarInfo({
         severity: 'success',
         content: '新建成功',
       })
+
+      updateDishInfo('create', id)
     }
   }
 
@@ -71,20 +81,26 @@ export default function DishNameDialog({ isOpen, handleClose }) {
         severity: 'success',
         content: '覆盖成功',
       })
+      updateDishInfo('update')
     }
   }
   return (
     <Modal open={isOpen} onClose={handleClose}>
       <Box className="dish-name-dialog-box">
         <div className="label">输入菜品名称</div>
-        <TextField
-          label="名称"
-          size="small"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-        />
-        <div>
-          <Button onClick={() => handleClose()}>取消</Button>
+        <div className="input-wrap">
+          <div className="input-label">名称</div>
+          <TextField
+            size="small"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+          />
+        </div>
+
+        <div className="button-wrap">
+          <Button onClick={() => handleClose()} sx={{ color: '#444444' }}>
+            取消
+          </Button>
           <Button onClick={handleCreateDish}>新建</Button>
           <Button onClick={handleUpdateDish}>覆盖</Button>
         </div>

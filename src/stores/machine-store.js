@@ -24,16 +24,16 @@ const machineStore = create((set, get) => ({
   washingTime: 0,
 
   setMachineRunningState: (flag) => {
-    set(() => ({
+    set({
       isMachineRunning: flag,
       washingTime: 0,
       stopUpdateFlag: true,
-    }))
+    })
 
     setTimeout(() => {
-      set(() => ({
+      set({
         stopUpdateFlag: false,
-      }))
+      })
     }, 500)
   },
 
@@ -47,8 +47,7 @@ const machineStore = create((set, get) => ({
           runningTime >= state.sortedDishSteps[i].time &&
           runningTime < state.sortedDishSteps[i + 1].time
         ) {
-          console.log('stepNumber: ', state.currentStepNumber)
-          return i;
+          return i
         }
       }
       return state.sortedDishSteps.length - 1
@@ -58,9 +57,9 @@ const machineStore = create((set, get) => ({
       const res = await getRunningStatus()
       if (res.data.success) {
         const data = res.data.data
-        set(() => ({
+        set({
           data,
-        }))
+        })
         if (data.id !== '00000000-0000-0000-0000-000000000000') {
         }
 
@@ -72,37 +71,37 @@ const machineStore = create((set, get) => ({
           if (data.washing_state === 0) {
             // 非清洗
             const currentStepNumber = setCurrentStepNumber(state.runningTime)
-            set(() => ({
+            set({
               isCookFinished: false,
               isMachineRunning: true,
               runningTime: ceil(data.time / 10),
               currentStepNumber,
-            }))
+            })
           } else {
             // 清洗中
-            set(() => ({
+            set({
               isMachineWashing: true,
               washingTime: ceil(data.time / 10),
-            }))
+            })
           }
         } else {
           // 空闲
-          set(() => ({
+          set({
             isMachineRunning: false,
             isMachineWashing: false,
-          }))
+          })
 
           if (data.id !== '00000000-0000-0000-0000-000000000000') {
             if (!state.isNewDishSelected) {
-              set(() => ({
+              set({
                 isCookFinished: true,
                 runningTime: state.dish.cook_time,
-              }))
+              })
               setCurrentStepNumber(state.runningTime)
             } else {
-              set(() => ({
+              set({
                 isCookFinished: false,
-              }))
+              })
             }
           }
         }
@@ -122,7 +121,7 @@ const machineStore = create((set, get) => ({
       res.sort(sortBy('time', 1))
       return res
     }
-    set(() => ({
+    set({
       dish,
       sortedDishSteps: setSortedDishSteps(dish.steps),
       currentStepNumber: 0,
@@ -130,7 +129,7 @@ const machineStore = create((set, get) => ({
       isCookFinished: false,
       runningTime: 0,
       washingTime: 0,
-    }))
+    })
   },
 }))
 
