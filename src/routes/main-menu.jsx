@@ -19,11 +19,9 @@ export default function MainMenu() {
   return (
     <div className="button-wrapper">
       <LargeButton onClick={() => navigate('running')}>运行控制</LargeButton>
-      <LargeButton onClick={() => navigate('dish-select')}>
-        菜品选择
-      </LargeButton>
+      <LargeButton onClick={() => navigate('dish-select')}>菜品选择</LargeButton>
       <LargeButton onClick={() => navigate('/dish-edit')}>菜品制作</LargeButton>
-      <LargeButton>全量控制</LargeButton>
+      <LargeButton onClick={() => navigate('/overall-control')}>全量控制</LargeButton>
       <LargeButton>系统设置</LargeButton>
     </div>
   )

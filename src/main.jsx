@@ -9,6 +9,7 @@ import DishEdit from './routes/dish-edit'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import MainMenu from './routes/main-menu'
 import RunningControl from './routes/running-control'
+import OverallControl from './routes/overall-control'
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
         path: '/dish-edit',
         element: <DishEdit />,
       },
+      {
+        path: '/overall-control',
+        element: <OverallControl />
+      }
     ],
   },
 ])

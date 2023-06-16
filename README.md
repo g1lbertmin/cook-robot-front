@@ -11,7 +11,7 @@ Install the dependencies:
 
 Run the following command to start the development server:
 `npm run dev`
-This will start the Vite development server and by default, the application will be available at localhost:3000.
+This will start the Vite development server and by default, the application will be available at localhost:5173.
 
 To build the project, run the following command:
 `npm run build`

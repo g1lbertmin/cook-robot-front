@@ -5,8 +5,9 @@ import '../styles/root.scss'
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material'
 import { Home, MoreVert } from '@mui/icons-material'
 import MySnackbar from '@/widgets/my-snackbar'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import machineStore from '@/stores/machine-store'
+import { PATH_NAME } from '@/constants'
 
 const TimeWidget = () => {
   const [update] = machineStore((state) => [state.update])
@@ -34,6 +35,8 @@ const TimeWidget = () => {
 
 export default function Root() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const title = PATH_NAME[location.pathname]
 
   return (
     <>
@@ -46,7 +49,7 @@ export default function Root() {
             <Typography>Cook Robot</Typography>
           </div>
           <div>
-            <Typography>菜品选择</Typography>
+            <Typography>{title}</Typography>
           </div>
           <div className="toolbar-right">
             <TimeWidget />
