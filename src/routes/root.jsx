@@ -23,7 +23,7 @@ const TimeWidget = () => {
   }, [update])
 
   useEffect(() => {
-    const timer = setInterval(() => setTime(new Date()), 1000)
+    const timer = setInterval(() => setTime(new Date()), 500)
 
     return () => {
       clearInterval(timer)
@@ -48,12 +48,10 @@ export default function Root() {
             </IconButton>
             <Typography>Cook Robot</Typography>
           </div>
-          <div>
-            <Typography>{title}</Typography>
-          </div>
+          <div className="toolbar-middle">{title}</div>
           <div className="toolbar-right">
             <TimeWidget />
-            <MoreVert className="more-vert-icon" />
+            {/* <MoreVert className="more-vert-icon" /> */}
           </div>
         </Toolbar>
         <MySnackbar />

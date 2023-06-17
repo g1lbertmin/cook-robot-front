@@ -19,12 +19,14 @@ import {
   getDish,
 } from '@/api/dish'
 
-import { Edit, Favorite, PlayArrow } from '@mui/icons-material'
+import { Edit, Favorite, PlayArrow, RamenDining } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 
 import appStore from '@/stores/app-store'
 import machineStore from '@/stores/machine-store'
 import { cloneDeep, debounce } from 'lodash'
+import { updateDish } from '../api/dish'
+import { produce } from 'immer'
 
 export default function DishSelect() {
   const [tabValue, setTabValue] = useState(0)
@@ -119,7 +121,6 @@ export default function DishSelect() {
   }
 
   const handleEditDish = () => {
-    console.log('dish: ', dish)
     setEditingDish(dish)
     navigate('/dish-edit')
   }
@@ -127,7 +128,6 @@ export default function DishSelect() {
   const handleInputChange = (event) => {
     const newValue = event.target.value
     setSearchedDishInitials(newValue)
-    console.log('new value: ', newValue)
     handleInputChangeDebounce(newValue)
   }
 
@@ -153,12 +153,13 @@ export default function DishSelect() {
     }
   }, 500)
 
-  const TabPanel = ({ children, value, index }) => {
-    return (
-      <div className="tab-panel" hidden={value !== index}>
-        {children}
-      </div>
-    )
+  const getFavorateDishList = () => {
+    getStarredDishes(1, 10, searchedDishInitials).then((res) => {
+      setStarredDishes(res.data)
+    })
+    getStarredDishesCount(searchedDishInitials).then((res) => {
+      setStarredDishCount(res.data)
+    })
   }
 
   const DishCard = ({ dish }) => {
@@ -178,7 +179,16 @@ export default function DishSelect() {
     )
   }
 
-  const handleFavorite = () => {}
+  const handleFavorite = () => {
+    const newDish = produce(dish, (draft) => {
+      draft.is_starred = !draft.is_starred
+    })
+    updateDish(newDish).then((res) => {
+      console.log(res)
+      setDish(newDish)
+      getFavorateDishList()
+    })
+  }
 
   const routeToRunningControl = () => {
     if (isMachineRunning) {
@@ -203,25 +213,34 @@ export default function DishSelect() {
         ></TextField>
       </div>
       <Tabs value={tabValue} onChange={handleTabValueChange} className="tabs">
-        <Tab label={`预制菜品（${dishCount}）`} className="tab" />
-        <Tab label={`收藏菜品（${starredDishCount}）`} className="tab" />
+        <Tab
+          label={`预制菜品（${dishCount}）`}
+          className="tab"
+          icon={<RamenDining fontSize="small" sx={{ mr: '13px' }} />}
+        />
+        <Tab
+          label={`收藏菜品（${starredDishCount}）`}
+          className="tab"
+          icon={<Favorite fontSize="small" sx={{ mr: '13px' }} />}
+        />
       </Tabs>
-      <TabPanel value={tabValue} index={0}>
-        <div className="dish-card-wrapper">
+      {tabValue === 0 && (
+        <div className="card-wrapper">
           {dishes.map((dish) => (
             <DishCard dish={dish} key={dish.id} />
           ))}
         </div>
-      </TabPanel>
-      <TabPanel value={tabValue} index={1}>
-        <div className="dish-card-wrapper">
+      )}
+      {tabValue === 1 && (
+        <div className="card-wrapper">
           {starredDishes.map((dish) => (
             <DishCard dish={dish} key={dish.id} />
           ))}
         </div>
-      </TabPanel>
+      )}
       <Pagination
         count={Math.ceil(pageCount / 10)}
+        shape="rounded"
         page={page}
         onChange={handlePageChange}
         className="pagination"
@@ -253,7 +272,10 @@ export default function DishSelect() {
                 <Edit className="edit-icon" />
               </IconButton>
               <IconButton onClick={handleFavorite}>
-                <Favorite className="favorite-icon" />
+                <Favorite
+                  className="favorite-icon"
+                  sx={{ color: dish.is_starred ? 'red' : 'gray' }}
+                />
               </IconButton>
               <IconButton onClick={routeToRunningControl}>
                 <PlayArrow className="play-arrow-icon" />
