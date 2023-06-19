@@ -131,6 +131,17 @@ const machineStore = create((set, get) => ({
       washingTime: 0,
     })
   },
+  setMachineWashState: (status) => {
+    set({
+      isMachineWashing: status,
+      washingTime: 0,
+      stopUpdateFlag: true,
+    })
+
+    setTimeout(() => {
+      set({ stopUpdateFlag: false })
+    }, 500)
+  },
 }))
 
 export default machineStore

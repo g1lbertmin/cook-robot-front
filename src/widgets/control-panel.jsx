@@ -19,6 +19,7 @@ export default function ControlPanel() {
     isCookFinished,
     setMachineRunningState,
     update,
+    setMachineWashingState
   ] = machineStore((state) => [
     state.data,
     state.runningTime,
@@ -27,6 +28,7 @@ export default function ControlPanel() {
     state.isCookFinished,
     state.setMachineRunningState,
     state.update,
+    state.setMachineWashingState
   ])
 
   const navigate = useNavigate()
@@ -213,6 +215,22 @@ export default function ControlPanel() {
     }
   }
 
+  const handleQuickCtrlBtnClick = async (type) => {
+    if (type === 'wash') {
+      setMachineWashingState(true)
+    }
+
+    const singleCommand = new Command("single")
+    const instruction = createSingleInstruction(type, 0, "on", 0, 0)
+    singleCommand.add(instruction)
+
+    try {
+      const res = await postCommand(singleCommand.getData())
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
   return (
     <div className="control-panel">
       <Progress progress={progress} />
@@ -254,10 +272,10 @@ export default function ControlPanel() {
       )}
       {!isMachineRunning && (
         <div className="buttons-wrapper">
-          <Button variant="contained">出菜</Button>
-          <Button variant="contained">清洗</Button>
-          <Button variant="contained">复位0</Button>
-          <Button variant="contained">复位1</Button>
+          <Button variant="contained" onClick={() => handleQuickCtrlBtnClick('dish_out')}>出菜</Button>
+          <Button variant="contained" onClick={() => handleQuickCtrlBtnClick('wash')}>清洗</Button>
+          <Button variant="contained" onClick={() => handleQuickCtrlBtnClick('reset0')}>复位0</Button>
+          <Button variant="contained" onClick={() => handleQuickCtrlBtnClick('reset1')}>复位1</Button>
         </div>
       )}
     </div>

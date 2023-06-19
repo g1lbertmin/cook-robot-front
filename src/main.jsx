@@ -10,6 +10,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import MainMenu from './routes/main-menu'
 import RunningControl from './routes/running-control'
 import OverallControl from './routes/overall-control'
+import SystemSetting from './routes/system-setting'
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: '/overall-control',
         element: <OverallControl />
+      },
+      {
+        path: '/system-setting',
+        element: <SystemSetting />
       }
     ],
   },

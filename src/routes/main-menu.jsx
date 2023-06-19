@@ -22,7 +22,7 @@ export default function MainMenu() {
       <LargeButton onClick={() => navigate('dish-select')}>菜品选择</LargeButton>
       <LargeButton onClick={() => navigate('/dish-edit')}>菜品制作</LargeButton>
       <LargeButton onClick={() => navigate('/overall-control')}>全量控制</LargeButton>
-      <LargeButton>系统设置</LargeButton>
+      <LargeButton onClick={() => navigate('/system-setting')}>系统设置</LargeButton>
     </div>
   )
 }
