@@ -18,22 +18,7 @@ export default function RunningStepBar({ dish }) {
 
   useEffect(() => {
     if (!dish) return
-
-    const cloneSteps = cloneDeep(dish.steps)
-
-    const line = []
-    for (const key in cloneSteps) {
-      if (key !== 'finish') {
-        line.push(...cloneSteps[key])
-      }
-    }
-    line.sort(sortBy('time', 1))
-    const finish = cloneSteps['finish'][0]
-    finish.time = line[line.length - 1].time + 10
-    line.push(finish)
-    setStepLine(line)
-
-    console.log('abc: ', isMachineRunning, currentStepNumber, sortedDishSteps)
+    setStepLine(sortedDishSteps)
   }, [dish])
 
   return (

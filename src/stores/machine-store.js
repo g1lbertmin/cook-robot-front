@@ -131,7 +131,7 @@ const machineStore = create((set, get) => ({
       washingTime: 0,
     })
   },
-  setMachineWashState: (status) => {
+  setMachineWashingState: (status) => {
     set({
       isMachineWashing: status,
       washingTime: 0,

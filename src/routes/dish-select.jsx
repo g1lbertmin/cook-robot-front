@@ -215,13 +215,13 @@ export default function DishSelect() {
       <Tabs value={tabValue} onChange={handleTabValueChange} className="tabs">
         <Tab
           label={`预制菜品（${dishCount}）`}
-          className="tab"
-          icon={<RamenDining fontSize="small" sx={{ mr: '13px' }} />}
+          className="my-tab"
+          icon={<RamenDining fontSize="small" sx={{ mr: '13px', mb: '0px' }} />}
         />
         <Tab
           label={`收藏菜品（${starredDishCount}）`}
-          className="tab"
-          icon={<Favorite fontSize="small" sx={{ mr: '13px' }} />}
+          className="my-tab"
+          icon={<Favorite fontSize="small" sx={{ mr: '13px', mb: '1px' }} />}
         />
       </Tabs>
       {tabValue === 0 && (
